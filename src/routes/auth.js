@@ -43,7 +43,7 @@ export const login = (req, res) => {
  * Make a `POST` request for the Access Token to `/api/token` endpoint if user 
  * accepts authorization request.
  */
-export const callback = (req, res) => {
+export const callback = async (req, res) => {
   
   const code = req.query.code || null;
   const state = req.query.state || null;
@@ -57,21 +57,21 @@ export const callback = (req, res) => {
   } else {
     res.clearCookie(stateKey);
 
-    const authOptions = {
+    const response =  await axios({
       url: 'https://accounts.spotify.com/api/token',
-      form: {
+      method: 'post',
+      params: {
         code: code,
         redirect_uri: redirectUri,
-        grant_type: 'authorization_code',
+        grant_type: 'authorization_code'
       },
       headers: {
-        "Authorization": 'Basic ' + (Buffer.from(clientId + ':' + clientSecret, "base64").toString()),
-        "Content-Type": 'application/x-www-form-urlencoded'
-      },
-      json: true
-    };
+        'Authorization': 'Basic ' + (Buffer.from(clientId + ':' + clientSecret).toString('base64')),
+        'Access': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
 
-    const response = axios.post(authOptions);
     console.log(response);
   }
 }

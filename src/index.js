@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import * as configs from "./utils/configs.js";
 import * as routes from "./routes/auth.js";
@@ -12,8 +13,9 @@ const PORT = process.env.PORT || 8080;
 
 
 // initialize middleware
-server.use(cors());
-server.use(configs.limiter);
+server.use(cors())
+  .use(configs.limiter)
+  .use(cookieParser());
 
 
 server.get("/login", routes.login);
