@@ -72,8 +72,21 @@ export const callback = async (req, res) => {
       }
     });
 
-    console.log(response);
+    if (response.status === 200){
+      const accessToken = response.data.access_token;
+      const refreshToken = response.data.refresh_token;
+
+      // TESTING: pass token to browser to make requests from there
+      res.redirect('/#' +
+        queryString.stringify({
+          access_token: accessToken,
+          refresh_token: refreshToken
+        }));
+      } else {
+        res.redirect('/#' + queryString.stringify({ error: 'invalid_token' }));
+      }
   }
+  console.log('done!');
 }
 
 /**
