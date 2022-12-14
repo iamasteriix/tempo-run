@@ -20,6 +20,7 @@ server.use(cors())
 
 server.get("/login", routes.login);
 server.get("/callback", routes.callback);
+server.get("/refresh_token", routes.getRefreshToken);
 
 server.listen(PORT);
 console.log("🚀  Server ready on port ", PORT);
